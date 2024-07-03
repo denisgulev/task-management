@@ -1,7 +1,7 @@
-# Ktor Task Web App
+# Task Web App
 ## Overview
 
-**ktor-task-web-app** is a web application designed to help you create and manage tasks. 
+**task-web-app** is a web application designed to help you create and manage tasks. 
 Built using Ktor, this app leverages a database backend for persistent storage. 
 The entire application is containerized using Docker and Docker Compose.
 
@@ -28,26 +28,23 @@ To run this application, you will need:
     cd ktor-task-web-app
     ```
 
-2. **Define a '.env' file with the variables required by the database:**
+2. **Define a '.env' file with the variables required by the database**
+   (see the file .env.example for reference)
 
-    ```bash
-    docker-compose up --build
-    ```
+
 3. **Build and run the application using Docker Compose:**
    1. build the application as a fatJar
+   ```bash
+   ./gradlew :buildFatJar 
+   ```
    2. run 'docker compose up -d'
-   3. 
-       ```bash
-       docker-compose up --build
-       ```
+   ```bash
+   docker-compose up -d
+   ```
 
 4. **Access the application:**
 
    Open your web browser and navigate to `http://localhost:8080/static/index.html` to start using the task manager.
-
-## Contributing
-
-We welcome contributions from the community! Please feel free to submit issues and pull requests to help improve the project.
 
 ## License
 
