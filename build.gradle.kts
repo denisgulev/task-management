@@ -20,20 +20,6 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-ktor {
-    docker {
-        localImageName.set("ktor-task-app")
-        imageTag.set("0.0.1-prev")
-        portMappings.set(listOf(
-            io.ktor.plugin.features.DockerPortMapping(
-                8088,
-                8080,
-                io.ktor.plugin.features.DockerPortMappingProtocol.TCP
-            )
-        ))
-    }
-}
-
 repositories {
     mavenCentral()
 }

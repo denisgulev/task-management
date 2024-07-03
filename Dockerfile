@@ -9,5 +9,5 @@ ENV DB_TYPE=$DB_TYPE \
     DB_USER=$DB_USER \
     DB_PASSWORD=$DB_PASSWORD
 RUN mkdir /app
-COPY ./build/libs/*-all.jar /app/ktor-task-app.jar
-ENTRYPOINT ["java", "-jar", "/app/ktor-task-app.jar"]
+COPY ./build/libs/*-all.jar /app/task-web-app.jar
+ENTRYPOINT ["java", "-jar", "/app/task-web-app.jar"]
