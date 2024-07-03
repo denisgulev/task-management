@@ -1,1 +1,1 @@
-rootProject.name = "com.example.ktor-task-web-app"
+rootProject.name = "task-web-app"
