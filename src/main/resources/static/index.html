@@ -1,5 +1,6 @@
-<html>
+<html lang="en">
 <head>
+    <title>Tast Web App</title>
 </head>
 <body>
 <h1>Task Manager Web Application</h1>
@@ -9,19 +10,23 @@
 <div>
     <h3>View tasks by priority</h3>
     <form method="get" action="/tasks/byPriority">
-        <select name="priority">
-            <option name="Low">Low</option>
-            <option name="Medium">Medium</option>
-            <option name="High">High</option>
-            <option name="Vital">Vital</option>
-        </select>
+        <label>
+            <select name="priority">
+                <option name="Low">Low</option>
+                <option name="Medium">Medium</option>
+                <option name="High">High</option>
+                <option name="Vital">Vital</option>
+            </select>
+        </label>
         <input type="submit">
     </form>
 </div>
 <div>
     <h3>View a task by name</h3>
     <form method="get" action="/tasks/byName">
-        <input type="text" name="taskName" width="10">
+        <label>
+            <input type="text" name="taskName" width="10">
+        </label>
         <input type="submit">
     </form>
 </div>
