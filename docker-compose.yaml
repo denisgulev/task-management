@@ -11,8 +11,6 @@ services:
         depends_on:
             db_postgres:
                 condition: service_healthy
-#            db_mongo:
-#                condition: service_started
         ports:
             - "8080:8080"
 
@@ -31,20 +29,5 @@ services:
             interval: 1s
             retries: 30
 
-#    db_mongo:
-#        image: mongo
-#        volumes:
-#            - mongodata:/data/db
-#        ports:
-#            - "27017:27017"
-#        environment:
-#            - MONGO_INITDB_ROOT_USERNAME=root
-#            - MONGO_INITDB_ROOT_PASSWORD=example
-#        healthcheck:
-#            test: [ "CMD-SHELL", "mongo --eval 'db.runCommand({ping: 1})'" ]
-#            interval: 1s
-#            retries: 30
-
 volumes:
     pgdata:
-#    mongodata:
