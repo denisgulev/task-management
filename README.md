@@ -33,11 +33,15 @@ To run this application, you will need:
 
 
 3. **Build and run the application using Docker Compose:**
-   1. build the application as a fatJar
+   1. make 'gradlew' executable on UNIX systems
+   ```bash
+   chmod +x gradlew
+   ```
+   2. build the application as a fatJar
    ```bash
    ./gradlew :buildFatJar 
    ```
-   2. run 'docker compose up -d'
+   3. run 'docker compose up -d'
    ```bash
    docker-compose up -d
    ```
