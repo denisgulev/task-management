@@ -1,21 +1,14 @@
 package com.example
 
-import com.example.model.PostgresTaskRepository
-import com.example.plugins.configureDatabases
-import com.example.plugins.configureRouting
-import com.example.plugins.configureSerialization
-import com.example.plugins.configureTemplating
+import com.example.plugins.*
 import io.ktor.server.application.*
+import io.ktor.server.netty.*
 
-fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
-}
+fun main(args: Array<String>) = EngineMain.main(args)
 
 fun Application.module() {
-    val repository = PostgresTaskRepository()
-
-    configureDatabases(environment.config)
-    configureSerialization(repository)
-    configureTemplating(repository)
+    configureDI(environment)
+    configureContentNegotiation()
+    configureTemplating()
     configureRouting()
 }

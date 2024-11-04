@@ -31,15 +31,18 @@ To run this application, you will need:
 2. **Define a '.env' file with the variables required by the database**
    (see the file .env.example for reference)
 
-
 3. **Build and run the application using Docker Compose:**
-   1. build the application as a fatJar
+   1. make 'gradlew' executable on UNIX systems
+   ```bash
+   chmod +x gradlew
+   ```
+   2. build the application as a fatJar
    ```bash
    ./gradlew :buildFatJar 
    ```
-   2. run 'docker compose up -d'
+   3. run 'docker compose up -d'
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 4. **Access the application:**
@@ -48,7 +51,7 @@ To run this application, you will need:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ## Contact
 
