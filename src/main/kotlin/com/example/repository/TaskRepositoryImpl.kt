@@ -1,21 +1,22 @@
 package com.example.repository
 
-import com.example.domain.entity.Task
-import com.example.domain.enum.Priority
-import com.example.domain.repository.ITaskRepository
+import com.example.entities.Priority
+import com.example.entities.Task
 import com.mongodb.MongoException
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
-import com.mongodb.kotlin.client.coroutine.MongoCollection
-import com.mongodb.kotlin.client.coroutine.MongoDatabase
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import org.bson.BsonValue
 import org.bson.types.ObjectId
+
 class TaskRepositoryImpl(
-    private val mongoDatabase: MongoDatabase
+    mongoClient: MongoClient
 ) : ITaskRepository {
+
+    private val taskCollection = mongoClient.getDatabase("tasks").getCollection<Task>(TASK_COLLECTION)
 
     companion object {
         const val TASK_COLLECTION = "task"
@@ -23,9 +24,7 @@ class TaskRepositoryImpl(
 
     override suspend fun allTasks(): List<Task> {
         try {
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION)
-                .find()
-                .toList()
+            return taskCollection.find().toList()
         } catch (e: MongoException) {
             System.err.println("Unable to retrieve data due to an error: $e")
         }
@@ -34,10 +33,7 @@ class TaskRepositoryImpl(
 
     override suspend fun addTask(task: Task): BsonValue? {
         try {
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION)
-                .insertOne(
-                    task
-                ).insertedId
+            return taskCollection.insertOne(task).insertedId
         } catch (e: MongoException) {
             System.err.println("Unable to insert data due to an error: $e")
         }
@@ -55,7 +51,7 @@ class TaskRepositoryImpl(
 
             val options = UpdateOptions().upsert(true)
 
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION).updateOne(
+            return taskCollection.updateOne(
                 eq(
                     Task::id.name,
                     id
@@ -71,7 +67,7 @@ class TaskRepositoryImpl(
 
     override suspend fun removeTask(id: ObjectId): Boolean {
         try {
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION).deleteOne(
+            return taskCollection.deleteOne(
                 eq(
                     Task::id.toString(),
                     id
@@ -85,7 +81,7 @@ class TaskRepositoryImpl(
 
     override suspend fun findById(id: ObjectId): Task? {
         try {
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION)
+            return taskCollection
                 .find(eq(Task::id.name, id))
                 .limit(1)
                 .firstOrNull()
@@ -97,7 +93,7 @@ class TaskRepositoryImpl(
 
     override suspend fun findByPriority(priority: Priority): List<Task> {
         try {
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION)
+            return taskCollection
                 .find(
                     eq(
                         Task::priority.name,
@@ -113,7 +109,7 @@ class TaskRepositoryImpl(
 
     override suspend fun findByName(name: String): Task? {
         try {
-            return mongoDatabase.getCollection<Task>(TASK_COLLECTION)
+            return taskCollection
                 .find<Task>(eq(Task::name.name, name))
                 .limit(1)
                 .firstOrNull()

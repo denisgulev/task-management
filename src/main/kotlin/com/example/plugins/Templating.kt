@@ -1,9 +1,9 @@
 package com.example.plugins
 
-import com.example.domain.entity.Task
-import com.example.domain.entity.toResponse
-import com.example.domain.enum.Priority
-import com.example.domain.repository.ITaskRepository
+import com.example.entities.Task
+import com.example.entities.toResponse
+import com.example.entities.Priority
+import com.example.repository.ITaskRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*

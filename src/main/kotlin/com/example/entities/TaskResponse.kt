@@ -1,7 +1,8 @@
-package com.example.application.response
+package com.example.entities
 
-import com.example.domain.enum.Priority
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TaskResponse(
     val id: String,
     val name: String,

@@ -43,7 +43,7 @@ To run this application, you will need:
    ```
    3. run 'docker compose up -d'
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 4. **Access the application:**

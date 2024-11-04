@@ -1,7 +1,7 @@
-package com.example.domain.repository
+package com.example.repository
 
-import com.example.domain.entity.Task
-import com.example.domain.enum.Priority
+import com.example.entities.Priority
+import com.example.entities.Task
 import org.bson.BsonValue
 import org.bson.types.ObjectId
 

@@ -1,9 +1,7 @@
 package com.example.routes
 
-import com.example.domain.entity.Task
-import com.example.domain.entity.toResponse
-import com.example.domain.enum.Priority
-import com.example.domain.repository.ITaskRepository
+import com.example.entities.*
+import com.example.service.ITaskService
 import io.ktor.http.*
 import io.ktor.serialization.*
 import io.ktor.server.application.*
@@ -14,58 +12,47 @@ import org.bson.types.ObjectId
 import org.koin.ktor.ext.inject
 
 fun Route.taskRoutes() {
-    val repository by inject<ITaskRepository>()
+    val taskService by inject<ITaskService>()
 
     route("/task") {
         get {
-            repository.allTasks().also {
+            taskService.getAllTasks().also {
                 call.respond(it)
             }
         }
 
         get("/{id?}") {
             val id = call.parameters["id"]
-            if (id.isNullOrEmpty()) {
-                return@get call.respondText(
-                    text = "Missing id",
-                    status = HttpStatusCode.BadRequest
-                )
-            }
-            repository.findById(ObjectId(id))?.let {
+                ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing id")
+
+            taskService.getTaskById(ObjectId(id))?.let {
                 call.respond(it.toResponse())
-            } ?: call.respondText("No records found for id $id")
+            } ?: call.respond(HttpStatusCode.NotFound, "No records found for id $id")
         }
 
         get("/byName/{taskName?}") {
             val name = call.parameters["taskName"]
-            if (name.isNullOrEmpty()) {
-                return@get call.respondText(
-                    text = "Missing name",
-                    status = HttpStatusCode.BadRequest
-                )
-            }
-            repository.findByName(name)?.let {
+                ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing name")
+
+            taskService.getTaskByName(name)?.let {
                 call.respond(it.toResponse())
-            } ?: call.respond(HttpStatusCode.NotFound)
+            } ?: call.respond(HttpStatusCode.NotFound, "No records found for name $name")
         }
 
         get("/byPriority/{priority}") {
             val priorityAsText = call.parameters["priority"]
-            if (priorityAsText.isNullOrEmpty()) {
-                return@get call.respondText(
-                    text = "Missing priority",
-                    status = HttpStatusCode.BadRequest
-                )
-            }
-            repository.findByPriority(Priority.valueOf(priorityAsText)).also {
-                call.respond(it)
-            }
+                ?: return@get call.respond(HttpStatusCode.BadRequest, "Missing priority")
+
+            taskService.getTasksByPriority(Priority.valueOf(priorityAsText))
+                .toList()
+                .map { it.toResponse() }
+                .let { call.respond(HttpStatusCode.OK, it) }
         }
 
         post {
             try {
-                val task = call.receive<Task>()
-                val insertedId = repository.addTask(task)
+                val task = call.receive<TaskRequest>()
+                val insertedId = taskService.createTask(task.toDomain())
                 call.respond(HttpStatusCode.Created, "Created task with id $insertedId")
             } catch (ex: IllegalStateException) {
                 call.respond(HttpStatusCode.BadRequest)
@@ -75,27 +62,23 @@ fun Route.taskRoutes() {
         }
 
         delete("/{id?}") {
-            val id = call.parameters["id"] ?: return@delete call.respondText(
-                text = "Missing task id",
-                status = HttpStatusCode.BadRequest
-            )
-            val deleted: Boolean = repository.removeTask(ObjectId(id))
+            val id = call.parameters["id"]
+                ?: return@delete call.respond(HttpStatusCode.BadRequest, "Missing id")
+            val deleted: Boolean = taskService.deleteTask(ObjectId(id))
             if (deleted) {
-                return@delete call.respondText("Task Deleted successfully", status = HttpStatusCode.OK)
+                return@delete call.respond(HttpStatusCode.OK, "Task Deleted successfully")
             }
-            return@delete call.respondText("Task not found", status = HttpStatusCode.NotFound)
+            return@delete call.respond(HttpStatusCode.NotFound, "Task not found")
         }
 
         patch("/{id?}") {
-            val id = call.parameters["id"] ?: return@patch call.respondText(
-                text = "Missing task id",
-                status = HttpStatusCode.BadRequest
-            )
-            val updated = repository.updateTask(ObjectId(id), call.receive<Task>())
-            call.respondText(
-                text = if (updated == 1L) "Task updated successfully" else "Task not found",
-                status = if (updated == 1L) HttpStatusCode.OK else HttpStatusCode.NotFound
-            )
+            val id = call.parameters["id"]
+                ?: return@patch call.respond(HttpStatusCode.BadRequest, "Missing task id")
+            val updated = taskService.updateTask(ObjectId(id), call.receive<Task>())
+            return@patch if (updated == 1L)
+                call.respond(HttpStatusCode.OK, "Task updated successfully")
+            else
+                call.respond(HttpStatusCode.NotFound, "Task not found")
         }
     }
 }
