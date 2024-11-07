@@ -74,7 +74,8 @@ fun Route.taskRoutes() {
         patch("/{id?}") {
             val id = call.parameters["id"]
                 ?: return@patch call.respond(HttpStatusCode.BadRequest, "Missing task id")
-            val updated = taskService.updateTask(ObjectId(id), call.receive<Task>())
+            val task = call.receive<TaskUpdate>()
+            val updated = taskService.updateTask(ObjectId(id), task.toDomain())
             return@patch if (updated == 1L)
                 call.respond(HttpStatusCode.OK, "Task updated successfully")
             else

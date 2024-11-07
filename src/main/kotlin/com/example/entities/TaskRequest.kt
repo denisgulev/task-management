@@ -8,3 +8,11 @@ data class TaskRequest(
     val description: String,
     val priority: Priority
 )
+
+@Serializable
+data class TaskUpdate(
+    val id: String,
+    val name: String,
+    val description: String,
+    val priority: Priority
+)

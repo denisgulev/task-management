@@ -15,3 +15,10 @@ fun TaskRequest.toDomain() = Task(
     description = description,
     priority = priority
 )
+
+fun TaskUpdate.toDomain() = Task(
+    id = ObjectId(id),
+    name = name,
+    description = description,
+    priority = priority
+)

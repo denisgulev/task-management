@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import org.bson.BsonValue
@@ -54,10 +55,7 @@ class TaskRepositoryImpl(
             val options = UpdateOptions().upsert(true)
 
             return taskCollection.updateOne(
-                eq(
-                    Task::id.name,
-                    id
-                ),
+                eq("_id", id),
                 updates,
                 options
             ).modifiedCount
@@ -70,10 +68,7 @@ class TaskRepositoryImpl(
     override suspend fun removeTask(id: ObjectId): Boolean {
         try {
             return taskCollection.deleteOne(
-                eq(
-                    Task::id.toString(),
-                    id
-                )
+                eq("_id", id)
             ).deletedCount > 0
         } catch (e: MongoException) {
             System.err.println("Unable to remove data due to an error: $e")
@@ -84,9 +79,8 @@ class TaskRepositoryImpl(
     override suspend fun findById(id: ObjectId): Task? {
         try {
             return taskCollection
-                .find(eq(Task::id.name, id))
-                .limit(1)
-                .firstOrNull()
+                .find(eq("_id", id))
+                .first()
         } catch (e: MongoException) {
             System.err.println("Unable to find data due to an error: $e")
         }
