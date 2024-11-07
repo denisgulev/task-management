@@ -14,11 +14,11 @@ import org.koin.ktor.ext.inject
 fun Route.taskRoutes() {
     val taskService by inject<ITaskService>()
 
-    route("/task") {
+    route("/tasks") {
         get {
-            taskService.getAllTasks().also {
-                call.respond(it)
-            }
+            val tasks = taskService.getAllTasks()
+                .map { it.toResponse() }
+            call.respond(tasks)
         }
 
         get("/{id?}") {

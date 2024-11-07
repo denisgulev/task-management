@@ -9,6 +9,5 @@ fun main(args: Array<String>) = EngineMain.main(args)
 fun Application.module() {
     configureDI(environment)
     configureContentNegotiation()
-    configureTemplating()
     configureRouting()
 }

@@ -1,23 +1,33 @@
 package com.example.plugins
 
+import com.example.repository.TaskRepositoryImpl
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import io.ktor.server.application.*
 import org.koin.dsl.module
 import org.koin.ksp.generated.defaultModule
-import org.koin.ksp.generated.module
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 fun Application.configureDI(environment: ApplicationEnvironment) {
-    val environmentModule = module {
-        single { environment }
-    }
-
     install(Koin) {
         slf4jLogger()
         modules(
-            environmentModule,
-            DatabaseModule().module,
-            defaultModule
+            defaultModule,
+            module {
+                single {
+                    MongoClient.create(
+                        environment.config.propertyOrNull("db.mongo.url")?.getString()
+                            ?: throw RuntimeException("Failed to access MongoDB URI.")
+                    )
+                }
+                single {
+                    get<MongoClient>().getDatabase(
+                        environment.config.property("db.mongo.database.name").getString()
+                    )
+                }
+            }, module {
+                single<TaskRepositoryImpl> { TaskRepositoryImpl(get()) }
+            }
         )
     }
 }

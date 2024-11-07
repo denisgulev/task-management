@@ -6,20 +6,22 @@ import com.mongodb.MongoException
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
-import com.mongodb.kotlin.client.coroutine.MongoClient
+import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import org.bson.BsonValue
 import org.bson.types.ObjectId
+import org.koin.core.annotation.Single
 
+@Single
 class TaskRepositoryImpl(
-    mongoClient: MongoClient
+    mongoDatabase: MongoDatabase
 ) : ITaskRepository {
 
-    private val taskCollection = mongoClient.getDatabase("tasks").getCollection<Task>(TASK_COLLECTION)
+    private val taskCollection = mongoDatabase.getCollection<Task>(TASK_COLLECTION)
 
     companion object {
-        const val TASK_COLLECTION = "task"
+        const val TASK_COLLECTION = "tasks"
     }
 
     override suspend fun allTasks(): List<Task> {

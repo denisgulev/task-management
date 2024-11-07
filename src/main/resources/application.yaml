@@ -4,9 +4,10 @@ ktor:
             - com.example.ApplicationKt.module
     deployment:
         port: 8080
-storage:
-    type: $DB_TYPE
-    url: $DB_URL
-    user: $DB_USER
-    password: $DB_PASSWORD
-    name: $DB_NAME
+db:
+    mongo:
+        user: $DB_USER
+        password: $DB_PASSWORD
+        url: $DB_URL
+        database:
+            name: $DB_NAME

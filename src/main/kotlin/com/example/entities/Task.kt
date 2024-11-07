@@ -1,5 +1,6 @@
 package com.example.entities
 
+import kotlinx.serialization.Serializable
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
@@ -10,7 +11,7 @@ data class Task(
     val description: String,
     val priority: Priority
 )
-
+@Serializable
 enum class Priority {
     Low, Medium, High, Vital
 }

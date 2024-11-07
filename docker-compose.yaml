@@ -13,12 +13,27 @@ services:
             db_mongo:
                 condition: service_started
         ports:
-            - "8080:8080"
+            - "8081:8080"
+
+#    web2:
+#        image: dman93/user-management:latest
+#        depends_on:
+#            db_mongo:
+#                condition: service_started
+#        ports:
+#            - "8082:8080"
+#        environment:
+#            - DB_TYPE=${DB_TYPE}
+#            - DB_URL=${DB_URL}
+#            - DB_USER=${DB_USER}
+#            - DB_PASSWORD=${DB_PASSWORD}
+#            - DB_NAME=${DB_NAME}
 
     db_mongo:
         image: mongo
         volumes:
             - mongodata:/data/db
+            - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
         ports:
             - "27017:27017"
         environment:
