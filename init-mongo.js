@@ -11,6 +11,7 @@ db.users.insertOne({
     email: "admin@example.com",
     password: "$2y$12$vZdxNmBdLBsw82C4wyoEXuZ8qsvU6zM9p8BjM.EExbeqZ5VAOT882", // Replace with the hashed password from the bcrypt script
     role: "ADMIN",
+    permission: "CREATE",
     createdAt: new Date(),
     updatedAt: new Date()
 });

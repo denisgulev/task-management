@@ -11,6 +11,7 @@ data class Task(
     val description: String,
     val priority: Priority
 )
+
 @Serializable
 enum class Priority {
     Low, Medium, High, Vital

@@ -41,6 +41,10 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
+    // Ktor Client
+    implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
     // MongoDB
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.10.1")
 
