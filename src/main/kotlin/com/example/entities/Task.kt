@@ -9,7 +9,8 @@ data class Task(
     val id: ObjectId,
     val name: String,
     val description: String,
-    val priority: Priority
+    val priority: Priority,
+    val userId: ObjectId
 )
 
 @Serializable

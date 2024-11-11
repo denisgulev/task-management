@@ -7,6 +7,7 @@ import org.bson.types.ObjectId
 
 interface ITaskRepository {
     suspend fun allTasks(): List<Task>
+    suspend fun allTasksForUser(userId: ObjectId): List<Task>
     suspend fun addTask(task: Task): BsonValue?
     suspend fun updateTask(id: ObjectId, task: Task): Long?
     suspend fun removeTask(id: ObjectId): Boolean

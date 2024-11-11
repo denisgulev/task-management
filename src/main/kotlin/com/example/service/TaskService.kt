@@ -16,6 +16,10 @@ class TaskService(
         repository.allTasks()
     }
 
+    override suspend fun getAllTasksForUser(userId: ObjectId): List<Task> = withContext(Dispatchers.IO) {
+        repository.allTasksForUser(userId)
+    }
+
     override suspend fun getTaskById(id: ObjectId): Task? = withContext(Dispatchers.IO) {
         repository.findById(id)
     }

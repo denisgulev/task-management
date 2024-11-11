@@ -6,19 +6,22 @@ fun Task.toResponse() = TaskResponse(
     id = id.toString(),
     name = name,
     description = description,
-    priority = priority
+    priority = priority,
+    userId = userId.toString()
 )
 
-fun TaskRequest.toDomain() = Task(
+fun TaskRequest.toDomain(userId: String) = Task(
     id = ObjectId(),
     name = name,
     description = description,
-    priority = priority
+    priority = priority,
+    userId = ObjectId(userId)
 )
 
-fun TaskUpdate.toDomain() = Task(
+fun TaskUpdate.toDomain(userId: String) = Task(
     id = ObjectId(id),
     name = name,
     description = description,
-    priority = priority
+    priority = priority,
+    userId = ObjectId(userId)
 )

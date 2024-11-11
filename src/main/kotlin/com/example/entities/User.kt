@@ -6,3 +6,8 @@ enum class Permission(val permission: String) {
     CREATE("create"),
     DELETE("delete")
 }
+
+data class UserInfo(
+    val hasPermission: Boolean,
+    val userId: String
+)

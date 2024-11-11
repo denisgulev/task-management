@@ -7,6 +7,8 @@ import org.bson.types.ObjectId
 interface ITaskService {
     suspend fun getAllTasks(): List<Task>
 
+    suspend fun getAllTasksForUser(userId: ObjectId): List<Task>
+
     suspend fun getTaskById(id: ObjectId): Task?
 
     suspend fun getTaskByName(name: String): Task?

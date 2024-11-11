@@ -7,5 +7,6 @@ data class TaskResponse(
     val id: String,
     val name: String,
     val description: String,
-    val priority: Priority
+    val priority: Priority,
+    val userId: String
 )

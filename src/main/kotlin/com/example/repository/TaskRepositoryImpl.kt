@@ -34,6 +34,17 @@ class TaskRepositoryImpl(
         return emptyList()
     }
 
+    override suspend fun allTasksForUser(userId: ObjectId): List<Task> {
+        try {
+            return taskCollection
+                .find(eq(Task::userId.name, userId))
+                .toList()
+        } catch (e: MongoException) {
+            System.err.println("Unable to retrieve data due to an error: $e")
+        }
+        return emptyList()
+    }
+
     override suspend fun addTask(task: Task): BsonValue? {
         try {
             return taskCollection.insertOne(task).insertedId
@@ -49,7 +60,8 @@ class TaskRepositoryImpl(
             val updates = Updates.combine(
                 Updates.set(Task::name.name, task.name),
                 Updates.set(Task::description.name, task.description),
-                Updates.set(Task::priority.name, task.priority)
+                Updates.set(Task::priority.name, task.priority),
+                Updates.set(Task::userId.name, task.userId)
             )
 
             val options = UpdateOptions().upsert(true)
