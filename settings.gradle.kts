@@ -1,1 +1,1 @@
-rootProject.name = "task-web-app"
+rootProject.name = "task-management"
